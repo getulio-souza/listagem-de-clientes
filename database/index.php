@@ -67,7 +67,7 @@
              'order':[],
              'ajax':{
                'url': 'fetch_data.php',
-                'type': 'post',
+               'type': 'post',
              },
              fncreateRow: function(nRow, aData, IdataIndex){
                  $(nRow).attr('id', aData[0]);
