@@ -88,8 +88,31 @@
              }]
         });
     </script>
-    <!-- inserindo o modal -->
+    <!-- modal script-->
+    <script type="text/javascript">
+     $(document).on('submit', '$addUserModal', function(event){
+       event.preventDefault();
+       let nome = $('#inputUserName').val()
+       let email = $('#inputEmail').val()
+       let telefone = $('#inputPhone').val()
+       let estado = $('#estado').val()
+       
+       if(nome != '' &&  email != '' && telefone != '' && estado != ''){
+         $.ajax({
+           url:"add_user.php",
+           data:{name:name, email:email, telefone:telefone, estado:estado},
+           type:'post',
+           success:function(data){
 
+           }
+         });
+       }
+       else{
+         alert ('Por favor, preencha todos os campos')
+       }
+     })
+    </script>
+    <!-- inserindo o modal -->
     <!-- Modal -->
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -98,32 +121,33 @@
         <h5 class="modal-title" id="exampleModalLabel">Informe os dados do cliente</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <!-- form control-->
+      <form id="salvarUsuarioForm" action="javascript:void();" method="post">
       <div class="modal-body">
-        <!-- form control-->
         <!-- usuário -->
         <div class="mb-3 row">
-    <label for="inputUsername" class="col-sm-2 col-form-label">Usuário:</label>
+    <label for="inputUsername" class="col-sm-2 col-form-label">Usuário*</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="inputUserName" value="">
     </div>
   </div>
   <!-- email-->
   <div class="mb-3 row">
-    <label for="inputEmail" class="col-sm-2 col-form-label">E-mail</label>
+    <label for="inputEmail" class="col-sm-2 col-form-label">E-mail*</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="inputEmail" name="inputEmail">
     </div>
   </div>
   <!-- Telefone-->
   <div class="mb-3 row">
-    <label for="inputEmail" class="col-sm-2 col-form-label">Telefone</label>
+    <label for="inputEmail" class="col-sm-2 col-form-label">Telefone*</label>
     <div class="col-sm-10">
-    <input type="tel" name="telphone" pattern="[0-9]{10}"  title="número com 11 digitos(incluindo DDD)" maxlength="11" required/>    
+    <input type="tel" name="phone" pattern="[0-9]{10}" id="inputPhone"  title="número com 11 digitos(incluindo DDD)" maxlength="11" required/>    
     </div>
   </div>
   <!-- Cidade-->
   <div class="mb-3 row">
-    <label for="inputEmail" class="col-sm-2 col-form-label">Estado</label>
+    <label for="inputEmail" class="col-sm-2 col-form-label">Estado*</label>
     <div class="col-sm-10">
     <select id="estado" name="estado">
     <option value="AC">Acre</option>
@@ -156,12 +180,12 @@
 </select>
     </div>
   </div>
-  
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
         <button type="button" class="btn btn-primary">Salvar alterações</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
