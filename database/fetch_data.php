@@ -4,6 +4,14 @@ $sql = "SELECT * FROM `database_lista_clientes`;";
 $query = mysqli_query($con, $sql);
 $count_all_rows = mysqli_num_rows($query);
 
+$coluna = array(
+    0=>'id',
+    1=>'name',
+    2=>'email',
+    3=>'telefone',
+    4=>'estado',
+);
+
 if(isset($_POST['search']['value'])){
     $search_value = $_POST['search']['value']; 
     $sql .= " Onde o nome do usuário é igual a '%".$search_value."%' ";
@@ -21,8 +29,7 @@ else{
     $sql .= "ORDER BY id ASC";
 }
 
-if($_POST['length'] ?? null){
-    
+if($_POST['length'] != -1){
   $start = $_POST['start'];
   $length = $_POST['length'];
   $sql .= " LIMIT ".$start.", ".$length;
@@ -40,15 +47,15 @@ while($row = mysqli_fetch_assoc($run_query)){
     $subarray[] = $row['email'];
     $subarray[] = $row['telefone'];
     $subarray[] = $row['cidade'];
-    $subarray[] = '<a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-info editBtn">Editar</a> <a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-danger">Deletar</a>';
+    $subarray[] = '<a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-info editBtn">Editar</a> <a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-danger btnDelete">Deletar</a>';
     $data[] = $subarray;
 }
 
 $output = array(
-    'data'=>$data,
     'draw'=>intval($_POST['draw']),
     'recordsTotal'=>$count_all_rows,
     'recordsFiltered'=>$filtered_rows,
+    'data'=>$data,
 );
 
 echo json_encode($output);

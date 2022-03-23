@@ -1,3 +1,4 @@
+<?php include('connection.php');?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -70,7 +71,9 @@
 
     <!-- inserindo o rodape dinâmico com jquery-->
     <script type="text/javaScript">
-        $('#datatable').DataTable({
+      $('#datatable').DataTable({
+          fncreatedRow: function(nRow, aData, IdataIndex){
+              $(nRow).attr('id', aData[0])
             'serveside': true, 
             'processing': true,
             'paging': true,
@@ -79,13 +82,12 @@
                'url': 'fetch_data.php',
                'type': 'post',
              },
-             fncreateRow: function(nRow, aData, IdataIndex){
-                 $(nRow).attr('id', aData[0]);
              },
              'columnDefs':[{
-                 'target': [0,5],
-                 orderable:false,
-             }]
+                 'bSortable': false,
+                  "aTargets":[5]
+             },
+            ]
         });
     </script>
     <!-- modal script-->
@@ -105,15 +107,10 @@
            success:function(data){   
              var json = JSON.parse(data);
              status = json.status;
-             if(status == 'sucess'){
+             if(status == 'success'){
                table = $('#datatable').Datatable();
                table.draw();
                alert ('usuário adicionado com sucesso');
-               $('#inputUserName').val('');
-               $('#inputEmail').val('');
-               $('#inputPhone').val('');
-               $('#estado').val('');
-
                $('#addUserModal').modal('hide')
            }
          }});
@@ -142,7 +139,7 @@
           $('#editUserModal').modal('show');
         }
       })
-    })
+    });
 
     $(document).on('submit', '#salvarUsuarioForm', function(){
       let id = $('#id').val();
@@ -156,9 +153,70 @@
         data: {id: id, name: name, email: email, phone: phone, estado:estado},
         type:"post",
         sucess:function(data){
-
+           let json = JSON.parse(data);
+           status = json.status;
+           if(status == 'sucess'){
+             table = ('#datatable').Datatable();
+             let button = '<a href="javascript:void();" class="btn btn-sm btn-info" data-id="'+ id +'">Editar</a> <a href="javascript:void();" class="btn btn-sm btn-danger" data-id="'+ id +'">Deletar</a>';
+             let row = table.row("[id='" + trid + "']");
+             row.row("[id='" + trid + "']").data([id, name, email, phone, estado, button]);
+             $('#editUserModal').modal('hide');
+           }
+           else{
+             alert ('failed');
+           }
         }
       });
+    });
+
+  $('#exemplo').on('click', '.botaoEditavel', function(event){
+    let table = $('#exemplo').Datatable();
+    let trid = $(this).closest('tr').attr('id');
+    let id = $(this).data('id');
+    $('#exemploModal').modal('mostrar');
+    
+    $.ajax({
+        url: "get_single_data.php",
+        data: {
+          id: id
+        },
+        type: 'post',
+        success: function(data) {
+          var json = JSON.parse(data);
+          $('#name').val(json.name);
+          $('#email').val(json.email);
+          $('#phone').val(json.phone);
+          $('#estado').val(json.estado);
+          $('#id').val(id);
+          $('#trid').val(trid);
+        }
+      })
+    });
+
+    ///remover o usuário adicionado 
+    $(document).on('click', '.btnDelete', function(event){
+      let id = $(this).data('id');
+      if(confirm('Você tem certeza de que quer deletar este usuário?')){
+
+        $.ajax({
+          url:"delele_user.php",
+          data:{id:id},
+        type:"post",
+        sucess:function(data){
+          let json = JSON.parse(data);
+          let status = json.status;
+          if(status=='sucess'){
+            $('#' + id).closest('tr').remove();
+          }
+          else{
+            alert('failed');
+          }
+        }
+      });
+      }
+      else{
+        return null;
+      }
     });
 
     </script>
@@ -243,7 +301,7 @@
 
    <!-- inserindo o modal -->
     <!-- Modal -->
-    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -320,6 +378,5 @@
     </div>
   </div>
 </div>
-
   </body>
 </html>

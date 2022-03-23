@@ -1,5 +1,6 @@
-<?php include('connection.php');
- 
+<?php
+include('connection.php');
+
  $username = $_POST['name'];
  $email = $_POST['email'];
  $email = $_POST['email'];
@@ -8,19 +9,20 @@
 
 $sql = "INSERT INTO `users` (`username`, `email`, `mobile`, `estado`) VALUES *('$username', '$email', '$telefone','$estado')";
 
-$query = mysqli_query(($con,$sql){
+$query= mysqli_query($con,$sql);
+$lastId = mysqli_insert_id($con);
+
     if($query==true){
         $data = array(
-            'status'=>'sucess',
+            'status'=>'Sucesso',
         );
         echo json_encode($data);
     }
     else{
         $data = array(
-            'status'=>'failed',
+            'status'=>'Falha',
         );
         echo json_encode($data);
     }
-}
 
 ?>
