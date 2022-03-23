@@ -1,6 +1,6 @@
 <?php include('connection.php'); 
 
-$sql = "SELECT * FROM users";
+$sql = "SELECT * FROM `lista_de_clientes`;";
 $query = mysqli_query($con, $sql);
 $count_all_rows = mysqli_num_rows($query);
 
@@ -22,6 +22,7 @@ else{
 }
 
 if($_POST['length'] != -1){
+    
   $start = $_POST['start'];
   $length = $_POST['length'];
   $sql .= " LIMIT ".$start.", ".$length;
@@ -34,11 +35,11 @@ $filtered_rows = mysqli_num_rows($run_query);
 
 while($row = mysqli_fetch_assoc($run_query)){
     $subarray = array();
-    $subarray[] = $row['id'];
-    $subarray[] = $row['nome'];
-    $subarray[] = $row['email'];
-    $subarray[] = $row['telefone'];
-    $subarray[] = $row['cidade'];
+    $subarray[] = utf8_encode($row['id']);
+    $subarray[] = utf8_encode($row['nome']);
+    $subarray[] = utf8_decode($row['email']);
+    $subarray[] = utf8_decode($row['telefone']);
+    $subarray[] = utf8_decode($row['cidade']);
     $subarray[] = '<a href="javascript:void();" class= "btn btn-sm btn-info">Editar</a> <a href="javascript:void();" class= "btn btn-sm btn-danger">Deletar</a>';
     $data[] = $subarray;
 }
@@ -51,7 +52,5 @@ $output = array(
 );
 
 echo json_encode($output);
-
-?>
 
 //22:05
