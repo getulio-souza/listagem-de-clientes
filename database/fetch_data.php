@@ -47,7 +47,7 @@ while($row = mysqli_fetch_assoc($run_query)){
     $subarray[] = $row['email'];
     $subarray[] = $row['telefone'];
     $subarray[] = $row['cidade'];
-    $subarray[] = '<a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-info editBtn">Editar</a> <a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-danger btnDelete">Deletar</a>';
+    $subarray[] = '<a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-info editBtn">Editar</a> <a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-danger deleteBtn">Deletar</a>';
     $data[] = $subarray;
 }
 

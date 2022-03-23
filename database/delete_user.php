@@ -1,7 +1,7 @@
 <?php include ('connection.php');
-$id = $_POST['id'];
-$sql = "DELETE FROM users WHERE id='$id'";
-$query = mysqli_query($con,$sql);
+$user_id = $_POST['id'];
+$sql = "DELETE FROM users WHERE id='$user_id'";
+$delquery = mysqli_query($con,$sql);
 if($query==true){
     $data = array(
         'status'=>'sucess',

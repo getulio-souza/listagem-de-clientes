@@ -82,22 +82,25 @@
                'url': 'fetch_data.php',
                'type': 'post',
              },
-             },
-             'columnDefs':[{
-                 'bSortable': false,
-                  "aTargets":[5]
-             },
-            ]
+             'funCreateRow':function(nRow,aData,aDataIndex){
+               $(nRow).attr('id', aData[0]);
+             }
+             columnDefs:[{
+               'target':[0,5],
+               'orderable':false,
+             }]
         });
     </script>
+
     <!-- modal script-->
+    <!-- adiciona um novo usuário à tabela --> 
     <script type="text/javascript">
      $(document).on('submit', '#salvarUsuarioForm', function(event){
        event.preventDefault();
        let nome = $('#inputUserName').val()
        let email = $('#inputEmail').val()
        let telefone = $('#inputPhone').val()
-       let estado = $('#estado').val()
+       let estado = $('#inputEstado').val()
        
        if(nome != '' &&  email != '' && telefone != '' && estado != ''){
          $.ajax({
@@ -119,8 +122,10 @@
          alert ('Por favor, preencha todos os campos')
        }
      })
+    
 
-    $(document).on('click','.editBtn', function(event){
+     //edita o usuário que foi adicionado 
+    $(document).on('click','.editbtn', function(event){
       let id = $(this).data('id');
       let trid = $(this).closest('tr').attr('id');
 
@@ -140,7 +145,8 @@
         }
       })
     });
-
+    
+    //salva o usuário na tabela 
     $(document).on('submit', '#salvarUsuarioForm', function(){
       let id = $('#id').val();
       let trid = $('#trid').val();
@@ -157,7 +163,7 @@
            status = json.status;
            if(status == 'sucess'){
              table = ('#datatable').Datatable();
-             let button = '<a href="javascript:void();" class="btn btn-sm btn-info" data-id="'+ id +'">Editar</a> <a href="javascript:void();" class="btn btn-sm btn-danger" data-id="'+ id +'">Deletar</a>';
+             let button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Editar</a>  <a href="#!"  data-id="' + id + '"  class="btn btn-danger btn-sm deleteBtn">Deletar</a></td>';
              let row = table.row("[id='" + trid + "']");
              row.row("[id='" + trid + "']").data([id, name, email, phone, estado, button]);
              $('#editUserModal').modal('hide');
@@ -167,9 +173,11 @@
            }
         }
       });
-    });
-
-  $('#exemplo').on('click', '.botaoEditavel', function(event){
+      }
+    );
+  
+    //botão para editar o usuário adicionado
+  $('#exemplo').on('click', '.editBtn', function(event){
     let table = $('#exemplo').Datatable();
     let trid = $(this).closest('tr').attr('id');
     let id = $(this).data('id');
@@ -193,23 +201,25 @@
       })
     });
 
-    ///remover o usuário adicionado 
-    $(document).on('click', '.btnDelete', function(event){
+    ///botão para remover o usuário adicionado 
+    $(document).on('click', '.deleteBtn', function(event){
+      event.preventDefault();
       let id = $(this).data('id');
       if(confirm('Você tem certeza de que quer deletar este usuário?')){
 
         $.ajax({
-          url:"delele_user.php",
+          url:"delete_user.php",
           data:{id:id},
         type:"post",
         sucess:function(data){
           let json = JSON.parse(data);
-          let status = json.status;
+          status = json.status;
           if(status=='sucess'){
             $('#' + id).closest('tr').remove();
           }
           else{
             alert('failed');
+            return;
           }
         }
       });
@@ -248,14 +258,14 @@
   </div>
   <!-- Telefone-->
   <div class="mb-3 row">
-    <label for="inputEmail" class="col-sm-2 col-form-label">Telefone*</label>
+    <label for="inputPhone" class="col-sm-2 col-form-label">Telefone*</label>
     <div class="col-sm-10">
     <input type="tel" name="phone" pattern="[0-9]{10}" id="inputPhone"  title="número com 11 digitos(incluindo DDD)" maxlength="11" required/>    
     </div>
   </div>
   <!-- Estado-->
   <div class="mb-3 row">
-    <label for="inputEmail" class="col-sm-2 col-form-label">Estado*</label>
+    <label for="InputEstado" class="col-sm-2 col-form-label" id="InputEstado">Estado*</label>
     <div class="col-sm-10">
     <select id="estado" name="estado">
     <option value="AC">Acre</option>
@@ -301,7 +311,7 @@
 
    <!-- inserindo o modal -->
     <!-- Modal -->
-    <div class="modal fade" id="" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
