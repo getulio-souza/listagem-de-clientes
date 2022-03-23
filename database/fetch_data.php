@@ -35,12 +35,12 @@ $filtered_rows = mysqli_num_rows($run_query);
 
 while($row = mysqli_fetch_assoc($run_query)){
     $subarray = array();
-    $subarray[] = utf8_encode($row['id']);
-    $subarray[] = utf8_encode($row['nome']);
-    $subarray[] = utf8_encode($row['email']);
-    $subarray[] = utf8_encode($row['telefone']);
-    $subarray[] = utf8_encode($row['cidade']);
-    $subarray[] = '<a href="javascript:void();" class= "btn btn-sm btn-info">Editar</a> <a href="javascript:void();" class= "btn btn-sm btn-danger">Deletar</a>';
+    $subarray[] = $row['id'];
+    $subarray[] = $row['nome'];
+    $subarray[] = $row['email'];
+    $subarray[] = $row['telefone'];
+    $subarray[] = $row['cidade'];
+    $subarray[] = '<a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-info editBtn">Editar</a> <a href="javascript:void();" data-id="'.$row['id'].'" class= "btn btn-sm btn-danger">Deletar</a>';
     $data[] = $subarray;
 }
 

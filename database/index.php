@@ -12,7 +12,7 @@
     <title>Listagem de clientes - CRUD</title>
   </head>
   <body>
-    <h1 class="text-center">Tabela de dados de clientes</h1>
+    <h1 class="text-center mt-4">Tabela de dados de clientes</h1>
       <!-- container -->
       <section class="container-fluid">
         <article class="row">
@@ -22,7 +22,7 @@
                <div class="col-md-2"></div>
                  <div class="col-md-8">
                    <!-- Button trigger modal -->
-                 <button type="button" class="btn btn-primary mt-4 mb-4"  data-bs-toggle="modal" data-bs-target="#addUserModal">
+                 <button type="button" class="btn btn-primary mt-4 mb-3"  data-bs-toggle="modal" data-bs-target="#addUserModal">
                  Adicionar usuário
                  </button>
                  </div>
@@ -90,7 +90,7 @@
     </script>
     <!-- modal script-->
     <script type="text/javascript">
-     $(document).on('submit', '$addUserModal', function(event){
+     $(document).on('submit', '#salvarUsuarioForm', function(event){
        event.preventDefault();
        let nome = $('#inputUserName').val()
        let email = $('#inputEmail').val()
@@ -102,15 +102,65 @@
            url:"add_user.php",
            data:{name:name, email:email, telefone:telefone, estado:estado},
            type:'post',
-           success:function(data){
+           success:function(data){   
+             var json = JSON.parse(data);
+             status = json.status;
+             if(status == 'sucess'){
+               table = $('#datatable').Datatable();
+               table.draw();
+               alert ('usuário adicionado com sucesso');
+               $('#inputUserName').val('');
+               $('#inputEmail').val('');
+               $('#inputPhone').val('');
+               $('#estado').val('');
 
+               $('#addUserModal').modal('hide')
            }
-         });
+         }});
        }
        else{
          alert ('Por favor, preencha todos os campos')
        }
      })
+
+    $(document).on('click','.editBtn', function(event){
+      let id = $(this).data('id');
+      let trid = $(this).closest('tr').attr('id');
+
+      $.ajax({
+        url:"get_single_user.php",
+        data:{id:id},
+        type:"_post",
+        sucess:function(data){
+          var json= JSON.parse(data);
+          $('#id').val(json.id);
+          $('#trid').val(trid);
+          $('#_inputUserName').val(json.name);
+          $('#_inputEmail').val(json.email);
+          $('#_inputPhone').val(json.phone);
+          $('#_estado').val(json.estado);
+          $('#editUserModal').modal('show');
+        }
+      })
+    })
+
+    $(document).on('submit', '#salvarUsuarioForm', function(){
+      let id = $('#id').val();
+      let trid = $('#trid').val();
+      let name = $('#_inputUserName').val();
+      let email = $('#_inputEmail').val();
+      let phone = $('#_inputPhone').val();
+      let estado = $('#_estado').val();
+      $.ajax({
+        url:"update_user.php",
+        data: {id: id, name: name, email: email, phone: phone, estado:estado},
+        type:"post",
+        sucess:function(data){
+
+        }
+      });
+    });
+
     </script>
     <!-- inserindo o modal -->
     <!-- Modal -->
@@ -145,11 +195,92 @@
     <input type="tel" name="phone" pattern="[0-9]{10}" id="inputPhone"  title="número com 11 digitos(incluindo DDD)" maxlength="11" required/>    
     </div>
   </div>
-  <!-- Cidade-->
+  <!-- Estado-->
   <div class="mb-3 row">
     <label for="inputEmail" class="col-sm-2 col-form-label">Estado*</label>
     <div class="col-sm-10">
     <select id="estado" name="estado">
+    <option value="AC">Acre</option>
+    <option value="AL">Alagoas</option>
+    <option value="AP">Amapá</option>
+    <option value="AM">Amazonas</option>
+    <option value="BA">Bahia</option>
+    <option value="CE">Ceará</option>
+    <option value="DF">Distrito Federal</option>
+    <option value="ES">Espírito Santo</option>
+    <option value="GO">Goiás</option>
+    <option value="MA">Maranhão</option>
+    <option value="MT">Mato Grosso</option>
+    <option value="MS">Mato Grosso do Sul</option>
+    <option value="MG">Minas Gerais</option>
+    <option value="PA">Pará</option>
+    <option value="PB">Paraíba</option>
+    <option value="PR">Paraná</option>
+    <option value="PE">Pernambuco</option>
+    <option value="PI">Piauí</option>
+    <option value="RJ">Rio de Janeiro</option>
+    <option value="RN">Rio Grande do Norte</option>
+    <option value="RS">Rio Grande do Sul</option>
+    <option value="RO">Rondônia</option>
+    <option value="RR">Roraima</option>
+    <option value="SC">Santa Catarina</option>
+    <option value="SP">São Paulo</option>
+    <option value="SE">Sergipe</option>
+    <option value="TO">Tocantins</option>
+</select>
+    </div>
+  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary">Salvar alterações</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- fim do user modal-->
+
+   <!-- inserindo o modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Atualizar usuário </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- form control-->
+      <form id="salvarUsuarioForm" action="javascript:void();" method="post">
+      <div class="modal-body">
+        <input type="hidden" id="id" name="id" value="">
+        <input type="hidden" id="trid" name="trid" value="">
+        <!-- usuário -->
+        <div class="mb-3 row">
+    <label for="inputUsername" class="col-sm-2 col-form-label">Usuário*</label>
+    <div class="col-sm-10">
+      <input type="text" name="_nome" class="form-control" id="_inputUserName" value="">
+    </div>
+  </div>
+  <!-- email-->
+  <div class="mb-3 row">
+    <label for="inputEmail" class="col-sm-2 col-form-label">E-mail*</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="_inputEmail" name="_inputEmail">
+    </div>
+  </div>
+  <!-- Telefone-->
+  <div class="mb-3 row">
+    <label for="inputEmail" class="col-sm-2 col-form-label">Telefone*</label>
+    <div class="col-sm-10">
+    <input type="tel" name="_phone" pattern="[0-9]{10}" id="_inputPhone"  title="número com 11 digitos(incluindo DDD)" maxlength="11" required/>    
+    </div>
+  </div>
+  <!-- Estado-->
+  <div class="mb-3 row">
+    <label for="inputEmail" class="col-sm-2 col-form-label">Estado*</label>
+    <div class="col-sm-10">
+    <select id="_estado" name="estado">
     <option value="AC">Acre</option>
     <option value="AL">Alagoas</option>
     <option value="AP">Amapá</option>
