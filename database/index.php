@@ -17,6 +17,16 @@
       <section class="container-fluid">
         <article class="row">
             <div class="container">
+              <!--btn modal -->
+               <div class="row">
+               <div class="col-md-2"></div>
+                 <div class="col-md-8">
+                   <!-- Button trigger modal -->
+                 <button type="button" class="btn btn-primary mt-4 mb-4"  data-bs-toggle="modal" data-bs-target="#addUserModal">
+                 Adicionar usuário
+                 </button>
+                 </div>
+               </div>
                 <div class="row">
                     <div class="col-md-2"></div>
                     <!--colunas -->
@@ -78,5 +88,83 @@
              }]
         });
     </script>
+    <!-- inserindo o modal -->
+
+    <!-- Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Informe os dados do cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- form control-->
+        <!-- usuário -->
+        <div class="mb-3 row">
+    <label for="inputUsername" class="col-sm-2 col-form-label">Usuário:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputUserName" value="">
+    </div>
+  </div>
+  <!-- email-->
+  <div class="mb-3 row">
+    <label for="inputEmail" class="col-sm-2 col-form-label">E-mail</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputEmail" name="inputEmail">
+    </div>
+  </div>
+  <!-- Telefone-->
+  <div class="mb-3 row">
+    <label for="inputEmail" class="col-sm-2 col-form-label">Telefone</label>
+    <div class="col-sm-10">
+    <input type="tel" name="telphone" pattern="[0-9]{10}"  title="número com 11 digitos(incluindo DDD)" maxlength="11" required/>    
+    </div>
+  </div>
+  <!-- Cidade-->
+  <div class="mb-3 row">
+    <label for="inputEmail" class="col-sm-2 col-form-label">Estado</label>
+    <div class="col-sm-10">
+    <select id="estado" name="estado">
+    <option value="AC">Acre</option>
+    <option value="AL">Alagoas</option>
+    <option value="AP">Amapá</option>
+    <option value="AM">Amazonas</option>
+    <option value="BA">Bahia</option>
+    <option value="CE">Ceará</option>
+    <option value="DF">Distrito Federal</option>
+    <option value="ES">Espírito Santo</option>
+    <option value="GO">Goiás</option>
+    <option value="MA">Maranhão</option>
+    <option value="MT">Mato Grosso</option>
+    <option value="MS">Mato Grosso do Sul</option>
+    <option value="MG">Minas Gerais</option>
+    <option value="PA">Pará</option>
+    <option value="PB">Paraíba</option>
+    <option value="PR">Paraná</option>
+    <option value="PE">Pernambuco</option>
+    <option value="PI">Piauí</option>
+    <option value="RJ">Rio de Janeiro</option>
+    <option value="RN">Rio Grande do Norte</option>
+    <option value="RS">Rio Grande do Sul</option>
+    <option value="RO">Rondônia</option>
+    <option value="RR">Roraima</option>
+    <option value="SC">Santa Catarina</option>
+    <option value="SP">São Paulo</option>
+    <option value="SE">Sergipe</option>
+    <option value="TO">Tocantins</option>
+</select>
+    </div>
+  </div>
+  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary">Salvar alterações</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   </body>
 </html>

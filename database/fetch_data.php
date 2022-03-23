@@ -1,6 +1,6 @@
 <?php include('connection.php'); 
 
-$sql = "SELECT * FROM `lista_de_clientes`;";
+$sql = "SELECT * FROM `database_lista_clientes`;";
 $query = mysqli_query($con, $sql);
 $count_all_rows = mysqli_num_rows($query);
 
@@ -21,7 +21,7 @@ else{
     $sql .= "ORDER BY id ASC";
 }
 
-if($_POST['length'] != -1){
+if($_POST['length'] ?? null){
     
   $start = $_POST['start'];
   $length = $_POST['length'];
@@ -37,9 +37,9 @@ while($row = mysqli_fetch_assoc($run_query)){
     $subarray = array();
     $subarray[] = utf8_encode($row['id']);
     $subarray[] = utf8_encode($row['nome']);
-    $subarray[] = utf8_decode($row['email']);
-    $subarray[] = utf8_decode($row['telefone']);
-    $subarray[] = utf8_decode($row['cidade']);
+    $subarray[] = utf8_encode($row['email']);
+    $subarray[] = utf8_encode($row['telefone']);
+    $subarray[] = utf8_encode($row['cidade']);
     $subarray[] = '<a href="javascript:void();" class= "btn btn-sm btn-info">Editar</a> <a href="javascript:void();" class= "btn btn-sm btn-danger">Deletar</a>';
     $data[] = $subarray;
 }
